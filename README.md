@@ -12,6 +12,8 @@
         - mine a block
         - check the validity of the chain
 
+![](Blockchain_V_1_0.gif)
+
 ## Instructions
 
 **To run the code:**
