@@ -3,7 +3,14 @@
 ## Creating a Blockchain
 
 **TODO**: Finish the project
-To run current version follow instructions below:
+
+**Version**:
+- 1.0:
+    - Blockchain class created (without stored data)
+    - Able to rudimentarily: 
+        - display the chain
+        - mine a block
+        - check the validity of the chain
 
 ## Instructions
 
