@@ -1,5 +1,33 @@
 # Blockchain-AZ-Projects
 
+## Creating a Blockchain
+
+**TODO**: Finish the project
+To run current version follow instructions below:
+
+## Instructions
+
+**To run the code:**
+
+1. Install Flask: `pip install Flask==0.12.2`
+2. Run `webapp.py`
+3. Open browser and navigate to either of these web pages:
+    1. `http://127.0.0.1:5000/get_chain`: displays the blockchain.
+    2. `http://127.0.0.1:5000/mine_block`: mines a block
+    3. `http://127.0.0.1:5000/get_chain`: checks the validity of the blockchain
+
+## Notes
+**TODO**: Finish the notes and add a project description
+
+
+- **Consensus Protocol**
+    - in case of two valid blocks mined at once, the one with the longest chain is chosen (more hashing power).
+    - **Proof of Work (POW)**
+        - A series of check to validate a block based on the work done to solve the cryptographic puzzle (hard to solve but easy to verify)
+        - All you need to verify is to check that the block data does output the right hash
+        - 
+    - **Proof of Stake (POS)**
+
 ## Resources
 
 - **Blockchain**
