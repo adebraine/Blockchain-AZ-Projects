@@ -12,18 +12,18 @@
         - mine a block
         - check the validity of the chain
 
-![](Blockchain_V_1_0.gif)
-
 ## Instructions
 
 **To run the code:**
 
 1. Install Flask: `pip install Flask==0.12.2`
-2. Run `webapp.py`
+2. Run `python webapp.py`
 3. Open browser and navigate to either of these web pages:
     1. `http://127.0.0.1:5000/get_chain`: displays the blockchain.
     2. `http://127.0.0.1:5000/mine_block`: mines a block
     3. `http://127.0.0.1:5000/get_chain`: checks the validity of the blockchain
+
+![](Blockchain_V_1_0.gif)
 
 ## Notes
 **TODO**: Finish the notes and add a project description
