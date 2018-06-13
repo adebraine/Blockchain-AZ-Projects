@@ -4,15 +4,14 @@
 
 **TODO**: Finish the project
 
-**Version**:
-- 1.0:
-    - Blockchain class created (without stored data)
-    - Able to rudimentarily: 
-        - display the chain
-        - mine a block
-        - check the validity of the chain
+## Version 1.0
+- Blockchain class created (without stored data)
+- Able to rudimentarily: 
+    - display the chain
+    - mine a block
+    - check the validity of the chain
 
-## Instructions
+### Instructions
 
 **To run the code:**
 
@@ -26,20 +25,109 @@
 ![](Blockchain_V_1_0.gif)
 
 ## Notes
-**TODO**: Finish the notes and add a project description
 
-
+- **SHA256**
+    - "finger print" of the current block
+    - any change to the data will completely change the hash
+    - a piece of data has a unique hash
+    - 5 requirements
+        - one way
+        - deterministic
+        - fast computation
+        - avalanche effect
+            - any change to the data will completely change the hash
+        - must withstand collisions
+            - collisions: different pieces of data that have the same hash
+            - cannot purposefully create a different piece of data with the same hash
+- **immutable ledger**
+    - the impossibility to change the data in a blockchain without changing the entire blockchain
+- **distributed P2P network**
+    - everyone participating has a copy of the blockchain
+    - the blockchain owned by the majority is the valid blockchain
+- **mining: Nonce**
+    - "Number used only once"
+    - a way to manipulate the block hash by changing the Nonce (data, previous hash, and block number cannot be changed)
 - **Consensus Protocol**
     - in case of two valid blocks mined at once, the one with the longest chain is chosen (more hashing power).
     - **Proof of Work (POW)**
         - A series of check to validate a block based on the work done to solve the cryptographic puzzle (hard to solve but easy to verify)
         - All you need to verify is to check that the block data does output the right hash
-        - 
     - **Proof of Stake (POS)**
+        - to be determined
+- **What is Bitcoin?**
+    - 3 layers:
+        - technology
+            - blockchain
+        - protocol/coin: 
+            - A set of rules that guides how participants in the networks to communicate with each other
+            - Contains a coin
+            - examples of protocols:
+                - Bitcoin, Ethereum, etc...
+        - token: ICOs offer tokens and not coins
+            - rely on smart contract that rely on protocols
+            - represents the "idea" behind what they are building
+            - Bitcoin, and Ripple have no tokens
+    - Invented by Satoshi Nakamoto
+    - Bitcoin Ecosystem:
+        - Nodes: People
+        - Miners
+        - Large mines
+        - Mining Pools
+- **Bitcoin's monetary policy**
+    - Entirely controlled by the software
+    - The halving
+        - The number of Bitcoins released into the system (bitcoins per block) is halved every 210,000 blocks
+        - 21 Million Bitcoins by 2140 (Since there is a finite number of decimals allowed)
+        - If the number of Bitcoins users increase then the transaction fees should increase which should counter balance the loss of rewards from halving to the miners
+    - inflation:
+        - coinbase * BlocksPerYear / ExistingCoins
+    - The Block Frequency
+        - Average block time:
+            - Bitcoin: 10min, Ethereum: 15s, etc...
+- **Understanding mining difficulty**
+    - Current target: leading zeros
+        - If the Results space encompasses all possible hash (hexadecimal):
+            - TotalResultsSpace*(1/16)^NumberLeadingZeros is the reduced results space
+        - Bitcoin: As of 6/13/2018, the target is 18 leading zeros
+            - Probability: 
+                - Total possible hashes: 16^64
+                - Total valid hashes: 16^46
+                - Probability of randomly pick a valid hash: 2*10^-22
+    - How is mining difficulty calculated:
+        - Difficulty = current target / max target
+        - Difficulty is adjusted every 2016 blocks (~2 weeks)
+        - max target = 00000000FFFF0000000000000000000000000000000000000000000000000000
+            - created at the very start of Bitcoin
+        - adjusted so that it takes 10min to mine a bitcoin on average
+            - However, power needed increases
+        - currently 5 trillion times harder to mine a block than at the start:
+            - [https://blockchain.info/charts/difficulty](https://blockchain.info/charts/difficulty)
+- **Bitcoin mine**
+    - Images of a large Bitcoin mine:
+        - [Large Chinese Bitcoin Mine](https://qz.com/1055126/photos-china-has-one-of-worlds-largest-bitcoin-mines/)
+- **Mining pools**
+    - Personal computer mining is very unlikely to solve the cryptographic puzzle before large industrial mines
+    - To solve that problem mining pools are created
+        - several people combine their hashing power to compete
+        - Distribution of the cryptographic puzzle to all participants to avoid double work
+            - Not working on the same Nonce
+        - Reward split depending on the hashing power contributed
+    - Removes headache of programming and taking care of the mining
+    - mining pool services take care of the computation entirely
+    - 
+- **Nonce range**
+- **How miners pick transactions**
+- **CPU vs GPU vs ASIC**
+- **How do Mempools work**
+- **Orphaned blocks**
+- **The 51% attack**
+- **Bits to target conversion**
+
 
 ## Resources
 
 - **Blockchain**
+    - Current Blockchain Information: [https://blockchain.info/](https://blockchain.info/)
     - What is a Blockchain
         - Stuart Haber & W. Scott Stornetta, (1991). [How to Time Stamp a Digital Document](https://www.anf.es/pdf/Haber_Stornetta.pdf)
     - Understanding a SHA256 Hash

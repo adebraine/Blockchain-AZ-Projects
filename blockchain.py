@@ -15,6 +15,9 @@ class Blockchain:
 
         data: dictionary
             Data contained in the blockchain (ledger).
+        
+        hash_operation: str
+            the POW hash
 
         create_block : Function
             The function that create blocks and starts with the genesis block.
@@ -23,6 +26,7 @@ class Blockchain:
         self.chain = []
         self.leading_zeros = 4
         self.data = {}
+        self.hash_operation = '0'
         self.create_block(proof=1, previous_hash='0')
 
     def create_data(self, key, value):
@@ -54,6 +58,8 @@ class Blockchain:
                     the proof of work (POW)
                 previous_hash: str
                     key element that links two blocks in a row in a blockchain.
+                hash_operation: str
+                    the POW hash
                 data: dictionary
                     data contained in the block
         """
@@ -61,6 +67,7 @@ class Blockchain:
                  'time_stamp': str(datetime.datetime.now()),
                  'proof': proof,
                  'previous_hash': previous_hash,
+                 'hash_operation': self.hash_operation,
                  'data': self.data}
         self.chain.append(block)
 
@@ -118,10 +125,11 @@ class Blockchain:
         """
         proof = 1
         while True:
-            hash_operation = self._SHA256(self.pow_function(
+            self.hash_operation = self._SHA256(self.pow_function(
                 proof, previous_proof))
 
-            if hash_operation[:self.leading_zeros] == '0'*self.leading_zeros:
+            if self.hash_operation[:self.leading_zeros] ==\
+                    '0'*self.leading_zeros:
                 return proof
             else:
                 proof += 1
@@ -150,11 +158,11 @@ class Blockchain:
             previous_block = chain[index - 1]
             previous_proof = previous_block['proof']
             proof = block['proof']
-            hash_operation = self._SHA256(self.pow_function(
+            self.hash_operation = self._SHA256(self.pow_function(
                 proof, previous_proof))
 
             if block['previous_hash'] != self.tohash(previous_block) or\
-                    hash_operation[:self.leading_zeros] !=\
+                    self.hash_operation[:self.leading_zeros] !=\
                     '0'*self.leading_zeros:
                 return False
 
@@ -178,6 +186,7 @@ class Blockchain:
                 'time_stamp': block['time_stamp'],
                 'proof': block['proof'],
                 'previous_hash': block['previous_hash'],
+                'hash_operation': block['hash_operation'],
                 'data': block['data']}
 
     def get_chain(self):
@@ -188,7 +197,7 @@ class Blockchain:
         """
         return {'chain': self.chain,
                 'length': len(self.chain)}
-    
+
     def is_valid(self):
         """Checks the validity of the blockchain.
 
@@ -211,25 +220,26 @@ if __name__ == "__main__":
     print("="*84)
     print("\n")
     print("the Initial Blockchain with the genesis block is:\n")
-    pp.pprint(bc.chain)
+    pp.pprint(bc.get_chain())
     print("\n")
     print("Mining one coin!")
     print("The second coin is:\n")
     block_2 = bc.mine_block()
-    pp.pprint(block_2)
+    block_3 = bc.mine_block()
+    pp.pprint(block_3)
     print("\n")
     print("Displaying the current Chain!\n")
-    pp.pprint(bc.chain)
+    pp.pprint(bc.get_chain())
     print("\n")
     print("Is the chain valid?\n")
     pp.pprint(bc.is_valid())
     print("\n")
-    print("Modifying the proof of the last block.")
-    print("pay attention to the proof value!")
+    print("Modifying the previous hash of the last block.")
+    print("pay attention to the previous hash value!")
     print("The chain now is:")
     print("\n")
-    bc.chain[1]["proof"] = 1
-    pp.pprint(bc.chain)
+    bc.chain[2]["previous_hash"] = '0'
+    pp.pprint(bc.get_chain())
     print("\n")
     print("Is the chain valid?\n")
     pp.pprint(bc.is_valid())
@@ -237,7 +247,3 @@ if __name__ == "__main__":
     print("="*84)
     print("END OF EXAMPLE!")
     print("="*84)
-    
-
-
-
