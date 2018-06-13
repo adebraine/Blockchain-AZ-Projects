@@ -1,10 +1,27 @@
 # Blockchain-AZ-Projects
 
-## Creating a Blockchain
+## Table of Contents
 
-**TODO**: Finish the project
+1. [Summary](#Summary)
+2. [Version Summary](#Version-Summary)
+3. [Version 1.0 Creating the Basic Blockchain](#Version-1.0:-Creating-the-Basic-Blockchain)
+4. [Notes](#Notes)
+    1. [The blockchain](#THE-BLOCKCHAIN)
+    2. [The Cryptocurrency](#THE-CRYPTOCURRENCY)
+    3. [The Smart Contract](#THE-SMART-CONTRACT)
+5. [Resources](Resources)
 
-## Version 1.0
+## Summary
+
+## Version Summary
+**V1.0**:
+- Blockchain class created (without stored data)
+- Able to rudimentarily: 
+    - display the chain
+    - mine a block
+    - check the validity of the chain
+
+## Version 1.0: Creating the Basic Blockchain
 - Blockchain class created (without stored data)
 - Able to rudimentarily: 
     - display the chain
@@ -25,6 +42,8 @@
 ![](Blockchain_V_1_0.gif)
 
 ## Notes
+
+### THE BLOCKCHAIN
 
 - **SHA256**
     - "finger print" of the current block
@@ -54,6 +73,9 @@
         - All you need to verify is to check that the block data does output the right hash
     - **Proof of Stake (POS)**
         - to be determined
+
+### THE CRYPTOCURRENCY
+
 - **What is Bitcoin?**
     - 3 layers:
         - technology
@@ -114,14 +136,172 @@
         - Reward split depending on the hashing power contributed
     - Removes headache of programming and taking care of the mining
     - mining pool services take care of the computation entirely
-    - 
-- **Nonce range**
-- **How miners pick transactions**
+- **Nonce range and how miners pick transactions**
+    - Nonce: a field in the block that can be changed to allow miners to compute different hashes to solve the cryptographic puzzle
+    - Nonce is not infinite: 32-bit number
+        - 0 -> 4 bil
+    - total possible 64 bit hexadecimal numbers: 10^64
+    - total valid hashes: 16^46
+    - probability that a random picked hash is valid: 2^-22
+    - Total possible 32-bit Nonce numbers: 2^32
+        - Assuming no collisions: 4*10^9 different hashes
+    - Probability that ONE Nonce leads to a valid hash: 10^-12
+        - MEANING: **One Nonce range is not enough to find a golden Nonce**
+    - A modest miner does 100 Million hashes per second (MH/s)
+        - a total Nonce range is then computed in 40seconds
+        - A solution to this problem is the use of the **Unix Time** in the hashing.
+            - since the time stamp is constantly changing every second, the hash also changes. Therefore, even if the Nonce range is limited, the hash is constantly changing with the changing time stamp allowing for the Nonce to be reset.
+    - If the mining rate goes beyond 4 bil hashes per second (BH/s):
+        - every node has a list of transactons stored in a **Mempool**
+        - A miner will choose which transactions are stored in the block from the Mempool
+            - Will choose the transactions with the highest fees.
+        - If the miner is not able to solve the cryptographic puzzle he will change the transactions included (replace a single transaction with the lowest fee by another transaction).
+        - He will do that until a second has passed then resets the transactions included to the transactions with the highest fees.
+        - Therefore No matter the mining rate, the miner is not constrained by the finite Nonce range.
+    - Blocks have a maximum size (Bitcoin: 1MB)
+        - People have to specify higher fees if they want their transactions to be pushed into a block by miners.
 - **CPU vs GPU vs ASIC**
+    - As of 6/13/2018 the Bitcoin mining rate is 36 mil TH/s (million trillion hashes per second)
+    - CPU: Central Processing Unit -> General
+        - Can solve the SHA256 < 10 MH/s
+    - GPU: Graphics Processing Unit -> Specialized (Matrix operations)
+        - Can solve the SHA256 < 1 GH/s
+    - ASIC: Application-Specific Integrated Circuit -> Specialized (SHA256 Hash)
+        - Can solve the SHA256 > 1,000 GH/s
+    - Cloud Mining: Pay a fee to use someone else's equipment
+    - No one has been successful yet to create an ASIC for Ethereum mining as it is memory dependent and doesn't use SHA256
 - **How do Mempools work**
+    - A Mempool is attached to each participant (miner or individual)
+    - A Mempool is not the blockchain it's a staging area for transactions before they are added to a block
+    - Blocks are added at a certain regularity (Bitcoin around every 10min)
+    - When a transaction is conducted, it is added to the participant's Mempool then propagated to the whole network Mempools if it is a valid transaction (see details further down)
+    - The Mempools are then filled with transactions and are identical between each participant (Considering each transaction is a valid transaction)
+    - A block can contain around 2000 transactions (1MB)
+    - Once a new block is mined, it contains a set of transactions that was selected based on their assigned fees which are given to the miner as a reward.
+    - These transactions are removed from the Mempools.
+    - In conclusion, transactions are more likely to go through faster if assigned fees are higher.
+    - NOTE: Transactions on the Mempools are called **Unconfirmed Transactions**
 - **Orphaned blocks**
+    - When two different miners find a new block at which point two versions of the chain are created
+    - Whoever finds the next block first confirms the chain and the other chain becomes invalid
+    - Transactions contained in the dropped chain go back to the Mempool except transactions that were also in the valid chain
+    - Therefore typically transactions are only successful after a couple of blocks were created.
+    - Rule of thumb for Bitcoin: wait for 6 confirmations (mined blocks)
+    - [Bitcoin Orphaned Blocks](https://blockchain.info/orphaned-blocks)
+    - Exchanges will not send you your money until a couple confirmations occur
 - **The 51% attack**
+    - Hypothetical attack
+    - It is not an attack designed to temper with already made blocks
+    - Refers to 51% of the hash rate
+    - Consider:
+        - a new blockchain with a few miners with their mempools
+        - a set of new miners then joins the network with their own mempools
+        - then the new set of miners decide to isolate themselves from the network and continue mining by themselves (not broadcast their new blocks)
+        - Now consider that these new miners have more than 51% of the hashing power (therefore mine faster than the regular blockchain network)
+        - Then after a while broadcast their **longer** blockchain
+        - Therefore all the new blocks mined (hence validated transactions) by the original miners become invalid because as said above, the **longer chain becomes the valid chain** and all the transactions go back to the mempool
+        - It creates a **double spend problem**
+        - While the blocks of the new miners become valid, so do their transactions and with the anonymity that blockchain provides no one can contest. 
 - **Bits to target conversion**
+    - Deriving the current target:
+        - We talked about the difficulty and the max target but what about the current target?
+    - Where is the current target stored:
+        - Bits: a field stored in the Bitcoin Block
+        - The Bits is then converted to Hexadecimal
+        - The first two values are then converted back to decimals
+        - example:
+            - Bits: 392009692
+            - Bits in hex: 175D97DC
+            - first two values in hex: 17
+            - first two values in decmials: 23
+            - That number becomes the number of bytes: 23 bytes -> 46 hex digits
+            - Becomes: 0000000000000000000000000000000000000000000000
+            - Replace the first values in that new hex number by the previous bits in hex:
+            - Becomes: 5D97DC0000000000000000000000000000000000000000
+            - Add missing leading zeros: 64 - 46 = 18 leading zeros as SHA256 is 64 bits
+            - The current target becomes:
+                - 0000000000000000005D97DC0000000000000000000000000000000000000000
+        - In conclusion, the current target is stored in this Bits format in each block to save space
+- **Transacitons and UTXOs (Unspent transactions outputs)**
+    - The transaction lives on until another transaction builds on the previous UTXO
+    - Since in a Blockchain there is no "Bank account" that contains money.
+    - Transaction rule of thumb: no input can be unspent meaning that when a certain amount of coins from the UTXOs are taken as input to "buy" something the difference between the input and the "price" is placed back into the UTXOs.
+    - Transaction example:
+        - UTXOs:
+            - friend 1 -> me 0.6 BTC
+            - friend 2 -> me 0.1 BTC
+            - friend 3 -> me 0.4 BTC
+            - friend 4 -> me 0.3 BTC
+        - Transaction 1: Buy item 1 for 0.5 BTC
+            - Input:   
+                - 0.6 BTC from friend 1
+            - Output:
+                - 0.5 BTC to shop
+                - 0.05 BTC back to myself (back to UTXOs)
+            - Fee:
+                - 0.05 BTC
+        - UTXOs:
+            - friend 2 -> me 0.1 BTC
+            - friend 3 -> me 0.4 BTC
+            - friend 4 -> me 0.3 BTC
+            - me       -> me 0.05 BTC
+        - Transaction 2: Buy item 2 for 0.6 BTC
+            - Input:
+                - 0.4 BTC from friend 3
+                - 0.3 BTC from friend 4
+            - Output:
+                - 0.6 BTC to shop
+                - 0.05 BTC back to myself (back to UTXOs)
+            - Fee:
+                - 0.05 BTC
+        - UTXOs:
+            - friend 2 -> me 0.1 BTC
+            - me       -> me 0.05 BTC
+            - me       -> me 0.05 BTC
+- **Where do transaction fees come from?**
+    - Anything not included in the output and input of a transaction becomes a fee.
+    - A fee needs to be volunteered (or bid) for your transactions to be selected by the miner in their new block
+- **How wallets work?**
+    - Since a block in a blockchain only contains transactions how is the balance calculated?
+    - The balance is just the sum of all your UTXOs
+    - In reality there is no "coins" there is only a list of transactions
+- **Signatures: Private and Public Keys**
+    - Consider:
+        - Private key: 
+            - an individual unique identifier which you can generate a public key from.
+            - a chosen number of chosen length (adds security)
+            - Cannot be reversed engineered
+        - Public key: 
+            - can be shared with others and is generated from a private key through an elliptic function
+            - a hexadecimal number based on the private key
+        - Message: Could be a transaction
+        - Signature: The private key is used to sign the message (combined)
+        - Verification function: takes input signature, Public key, Message and outputs a yes or a no
+    - The private key cannot be found through the verification function but the combination of the public key, private key and message can be checked whether it is valid or not.
+        - example:
+            - transaction goes into the Mempool (which contains the public key, signature and the message)
+            - The verification function can then check whether the transaction (message + signature) was created by the private key which issued the public key.
+- **What is Segregated Witness? (SegWit)**
+    - Separate the signature and public key from the blocks as they are long hexadecimal numbers that take 60% of the size of the block.
+    - Have the signature and public key in their own network (messaging channel)
+    - can use the freed space to add more transactions
+- **Public Key vs Bitcoin Address**
+    - Bitcoin address: derived from the public key by applying the SHA256 hash
+    - People can send transactions to either the public key or the bitcoin address
+    - While the public key is shared it shouldn't be exposed too much and that is the purpose of the bitcoin address
+    - If the elliptic function is reversed engineered then the private key can be obtained
+    - if the SHA256 is used on top of the elliptic function, additional security is added to the private key
+- **Hierarchically Deterministic (HD) wallets**
+    - Purpose of the private key is to keep the identity of the own private
+    - People shouldn't be able to monitor other's transactions
+    - Contains:
+        - Master Private key: used to generate private keys
+        - both private keys and master private keys should be kept secrect
+    - The master private key can generate new private keys by incrementing the the master private key by 1. 
+    - The master private key can find out everything about every transactions from every private key generated but a generated private key cannot be used to find out about transactions from other generated private keys.
+    - A master public key can also be used to check all public keys generated from all the private keys but it cannot be used to check the other private keys (keeps these private keys secure)
+
+### THE SMART CONTRACT
 
 
 ## Resources
@@ -158,7 +338,7 @@
     - How do Mempools Work?
         - Marion Deneuville, (2016), [An in-depth guide into how the mempool works](https://blog.kaiko.com/an-in-depth-guide-into-how-the-mempool-works-c758b781c608)
     - The 51% Attack
-        - David Vorick, (2017), [Choosing ASICs for Sia](https://blog.sia.tech/choosing-asics-for-sia-b318505b5b51)
+        - David Vorick, (2017), [Choosing ASICs for Sia (Read the comments too)](https://blog.sia.tech/choosing-asics-for-sia-b318505b5b51)
     - The Dao Attack
         - Richard Sutton, (1988), [Learning to Predict by the Methods of Temporal Differences](https://link.springer.com/article/10.1007/BF00115009)
     - Soft and Hard Forks
