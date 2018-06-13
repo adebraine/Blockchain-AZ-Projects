@@ -1,4 +1,4 @@
-import xlsxwriter as xl
+import json
 
 block = {'index': 11,
          'time_stamp': '11/11/11',
@@ -7,6 +7,8 @@ block = {'index': 11,
          'hash_operation': '0000',
          'data': {}}
 
-wb = Workbook()
-sheet1 = wb.add_sheet('Sheet 1')
-wb.save('chain.xls')
+strblock = json.dumps(block, sort_keys=True)
+
+print(strblock)
+
+print(type(strblock))

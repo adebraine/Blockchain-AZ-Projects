@@ -82,7 +82,7 @@ class Blockchain:
         """
         return self.chain[-1]
 
-    def _SHA256(self, to_be_encoded):
+    def encrypt_to_hash(self, to_be_encoded):
         """Creates a SHA256 hash from a string.
 
         :param to_be_encoded: str
@@ -125,7 +125,7 @@ class Blockchain:
         """
         proof = 1
         while True:
-            self.hash_operation = self._SHA256(self.pow_function(
+            self.hash_operation = self.encrypt_to_hash(self.pow_function(
                 proof, previous_proof))
 
             if self.hash_operation[:self.leading_zeros] ==\
@@ -134,16 +134,15 @@ class Blockchain:
             else:
                 proof += 1
 
-    def tohash(self, block):
-        """First creates a string out of a block then
-        Creates a hash of a block in the blockchain.
+    def block_to_str(self, block):
+        """Creates a string out of a block.
 
         :param block: dic
             A block in the blockchain.
-        :return encoded_block: str
-            A hash of the selected block.
+        :return: str
+            A string of the selected block.
         """
-        return self._SHA256(json.dumps(block, sort_keys=True))
+        return json.dumps(block, sort_keys=True)
 
     def is_chain_valid(self, chain):
         """Checks if the chain is a valid chain
@@ -158,10 +157,11 @@ class Blockchain:
             previous_block = chain[index - 1]
             previous_proof = previous_block['proof']
             proof = block['proof']
-            self.hash_operation = self._SHA256(self.pow_function(
+            self.hash_operation = self.encrypt_to_hash(self.pow_function(
                 proof, previous_proof))
 
-            if block['previous_hash'] != self.tohash(previous_block) or\
+            if block['previous_hash'] != self.encrypt_to_hash(
+                    self.block_to_str(previous_block)) or\
                     self.hash_operation[:self.leading_zeros] !=\
                     '0'*self.leading_zeros:
                 return False
@@ -176,7 +176,7 @@ class Blockchain:
         """
         previous_block = self.get_previous_block()
         previous_proof = previous_block['proof']
-        previous_hash = self.tohash(previous_block)
+        previous_hash = self.encrypt_to_hash(self.block_to_str(previous_block))
 
         proof = self.proof_of_work(previous_proof)
         block = self.create_block(proof, previous_hash)
