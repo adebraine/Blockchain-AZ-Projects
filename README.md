@@ -32,6 +32,10 @@
 
 **To run the code:**
 
+1. run `python blockchain.py`
+
+**or**
+
 1. Install Flask: `pip install Flask==0.12.2`
 2. Run `python webapp.py`
 3. Open browser and navigate to either of these web pages:
