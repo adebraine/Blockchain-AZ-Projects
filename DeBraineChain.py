@@ -1,7 +1,9 @@
 import datetime
 import hashlib
 import json
-
+import requests
+from uuid import uuid4
+from urllib.parse import urlparse
 
 class Blockchain:
     """A class representing the entire blockchain.
@@ -222,58 +224,28 @@ if __name__ == "__main__":
     print("the Initial Blockchain with the genesis block is:\n")
     pp.pprint(bc.get_chain())
     print("\n")
-    command = ''
-    ask = True
-
-    while True:
-        if ask is True:
-            print("You have access to the following commands:\n")
-            print("   get_chain: Displays the Blockchain\n")
-            print("   mine_block: Mines a block and displays the block\n")
-            print("   hack_chain: Modifies the Blockchain\n")
-            print("   is_valid: checks if the Blockchain was tempered with\n")
-            print("   quit: Stop\n")
-            command = input("Enter get_chain, mine_block, hack_chain, is_valid, or quit: ")
-            ask = False
-        else:
-            if command == 'get_chain':
-                print("\n")
-                pp.pprint(bc.get_chain())
-                print("\n")
-                ask = True
-            elif command == 'mine_block':
-                print("\n")
-                pp.pprint(bc.mine_block())
-                print("\n")
-                ask = True
-            elif command == 'is_valid':
-                print("\n")
-                pp.pprint(bc.is_valid())
-                print("\n")
-                ask = True
-            elif command == 'hack_chain':
-                chain = bc.get_chain()
-                n = int(input('Which block to hack? Enter block index: '))
-                if n < chain['length'] and n >= 1:
-                    print("Hack which parameter:\n")
-                    print("   index: Block index (int)\n")
-                    print("   time_stamp: Time of mining (str)\n")
-                    print("   proof: Nonce of the currenct block (int)\n")
-                    print("   previous_hash: Hash of the previous block (str)\n")
-                    print("   hash_operation: Proof of work hash (str)\n")
-                    what = input("Enter: index, time_stamp, proof, previous_hash, or hash_operation: ")
-                    thehack = input("Enter your hack (correct format): ")
-                    if what == 'index' or what == 'proof':
-                        thehack = int(thehack)
-                    bc.chain[n][what] = thehack
-                    print("\n")
-                    pp.pprint(bc.chain[n])
-                    print("\n")
-                else:
-                    print("Wrong block index\n")
-                ask = True
-            elif command == 'quit':
-                break
-            else:
-                print("Wrong command\n")
-                ask = True
+    print("Mining one coin!")
+    print("The second coin is:\n")
+    block_2 = bc.mine_block()
+    block_3 = bc.mine_block()
+    pp.pprint(block_3)
+    print("\n")
+    print("Displaying the current Chain!\n")
+    pp.pprint(bc.get_chain())
+    print("\n")
+    print("Is the chain valid?\n")
+    pp.pprint(bc.is_valid())
+    print("\n")
+    print("Modifying the previous hash of the last block.")
+    print("pay attention to the previous hash value!")
+    print("The chain now is:")
+    print("\n")
+    bc.chain[2]["previous_hash"] = '0'
+    pp.pprint(bc.get_chain())
+    print("\n")
+    print("Is the chain valid?\n")
+    pp.pprint(bc.is_valid())
+    print("\n")
+    print("="*84)
+    print("END OF EXAMPLE!")
+    print("="*84)
