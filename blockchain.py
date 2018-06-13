@@ -159,3 +159,85 @@ class Blockchain:
                 return False
 
         return True
+
+    def mine_block(self):
+        """Mines a block in the blockchain.
+
+        :return: dictionary
+            A dictionary containing the current block.
+        """
+        previous_block = self.get_previous_block()
+        previous_proof = previous_block['proof']
+        previous_hash = self.tohash(previous_block)
+
+        proof = self.proof_of_work(previous_proof)
+        block = self.create_block(proof, previous_hash)
+
+        return {'message': 'Block Mined!',
+                'index': block['index'],
+                'time_stamp': block['time_stamp'],
+                'proof': block['proof'],
+                'previous_hash': block['previous_hash'],
+                'data': block['data']}
+
+    def get_chain(self):
+        """Gets the whole blockchain.
+
+        :return: dictionary
+            A dictionary with the blockchain and its length.
+        """
+        return {'chain': self.chain,
+                'length': len(self.chain)}
+    
+    def is_valid(self):
+        """Checks the validity of the blockchain.
+
+        :return: JSON string
+            returns a successful HTTP request of
+            the response in a JSON format
+        """
+        validity = self.is_chain_valid(self.chain)
+        if validity:
+            return {'message': 'The chain is valid!'}
+
+        return {'message': 'The chain is NOT valid!'}
+
+
+if __name__ == "__main__": 
+    import pprint as pp
+    bc = Blockchain()
+    print("="*84)
+    print("CREATING A BLOCKCHAIN!")
+    print("="*84)
+    print("\n")
+    print("the Initial Blockchain with the genesis block is:\n")
+    pp.pprint(bc.chain)
+    print("\n")
+    print("Mining one coin!")
+    print("The second coin is:\n")
+    block_2 = bc.mine_block()
+    pp.pprint(block_2)
+    print("\n")
+    print("Displaying the current Chain!\n")
+    pp.pprint(bc.chain)
+    print("\n")
+    print("Is the chain valid?\n")
+    pp.pprint(bc.is_valid())
+    print("\n")
+    print("Modifying the proof of the last block.")
+    print("pay attention to the proof value!")
+    print("The chain now is:")
+    print("\n")
+    bc.chain[1]["proof"] = 1
+    pp.pprint(bc.chain)
+    print("\n")
+    print("Is the chain valid?\n")
+    pp.pprint(bc.is_valid())
+    print("\n")
+    print("="*84)
+    print("END OF EXAMPLE!")
+    print("="*84)
+    
+
+
+
