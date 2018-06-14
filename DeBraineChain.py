@@ -1,9 +1,11 @@
 import datetime
 import hashlib
+from flask import Flask, jsonify, request
 import json
 import requests
 from uuid import uuid4
 from urllib.parse import urlparse
+import pprint as pp
 
 class Blockchain:
     """A class representing the entire blockchain.
@@ -27,20 +29,14 @@ class Blockchain:
     def __init__(self):
         self.chain = []
         self.leading_zeros = 4
-        self.data = {}
+        self.transactions_per_block = 4
+        self.miner_reward = 100
+        self.transactions = []
+        self.mempool = []
+        self.UTOX = []
         self.hash_operation = '0'
         self.create_block(proof=1, previous_hash='0')
-
-    def create_data(self, key, value):
-        """Adds information to the data contained in the blockchain.
-
-        :param key: str
-            Keyword defining the specific data included
-
-        :param value: To be determined
-            value corresponding to the keyword
-        """
-        self.data[key] = value
+        self.nodes = set()
 
     def create_block(self, proof, previous_hash):
         """Creates a block in the blockchain and returns said block.
@@ -70,7 +66,8 @@ class Blockchain:
                  'proof': proof,
                  'previous_hash': previous_hash,
                  'hash_operation': self.hash_operation,
-                 'data': self.data}
+                 'transactions': self.transactions}
+        self.transactions = []
         self.chain.append(block)
 
         return block
@@ -170,82 +167,116 @@ class Blockchain:
 
         return True
 
-    def mine_block(self):
-        """Mines a block in the blockchain.
+    def commit_transaction(self, sender, receiver, amount, fee):
+        """Adds a transaction to the mempool.
 
+        :param sender: str
+            Address of the sender
+        :param receiver: str
+            Address of the receiver
+        :param amount: float
+            amount traded
+        :param amount: float
+            fee added to the transaction
+        """
+        cost = 0
+        enough_money = 0
+        for index, transaction in enumerate(self.UTOX):
+            enough_money += transaction['amount']
+
+        if enough_money > amount + fee:
+            for index, transaction in enumerate(self.UTOX):
+                if cost >= amount + fee:
+                    break
+                cost += transaction['amount']
+                self.UTOX.remove(transaction)
+
+            if cost - amount - fee > 0:
+                return_transaction = self.create_transaction(
+                    sender, receiver, cost - amount - fee, fee)
+                self.UTOX.append(return_transaction)
+            elif cost - amount - fee >= 0:
+                output_transaction = self.create_transaction(
+                    sender, receiver, amount, fee)
+                self.mempool.append(output_transaction)
+
+            return True
+        return False
+
+    def create_transaction(self, sender, receiver, amount, fee):
+        """Create a transaction
+
+        :param sender: str
+            Address of the sender
+        :param receiver: str
+            Address of the receiver
+        :param amount: float
+            amount traded
+        :param amount: float
+            fee added to the transaction
         :return: dictionary
-            A dictionary containing the current block.
+            A transaction
         """
-        previous_block = self.get_previous_block()
-        previous_proof = previous_block['proof']
-        previous_hash = self.encrypt_to_hash(self.block_to_str(previous_block))
+        return {"sender": sender,
+                "receiver": receiver,
+                "amount": amount,
+                "fee": fee}
 
-        proof = self.proof_of_work(previous_proof)
-        block = self.create_block(proof, previous_hash)
+    def add_transactions_to_block(self):
+        """Fills the block with transactions with the highest fee.
 
-        return {'message': 'Block Mined!',
-                'index': block['index'],
-                'time_stamp': block['time_stamp'],
-                'proof': block['proof'],
-                'previous_hash': block['previous_hash'],
-                'hash_operation': block['hash_operation'],
-                'data': block['data']}
-
-    def get_chain(self):
-        """Gets the whole blockchain.
-
-        :return: dictionary
-            A dictionary with the blockchain and its length.
+        :return: int
+            index of the block that contains the transactions
         """
-        return {'chain': self.chain,
-                'length': len(self.chain)}
+        if not self.mempool:
+            return
+        for n in range(self.transactions_per_block):
+            max_fee = 0
+            for index, transaction in enumerate(self.mempool):
+                if transaction['fee'] > max_fee:
+                    max_fee = transaction['fee']
+                    max_fee_transaction = transaction
 
-    def is_valid(self):
-        """Checks the validity of the blockchain.
+            print(max_fee_transaction)
+            print(self.mempool)
 
-        :return: JSON string
-            returns a successful HTTP request of
-            the response in a JSON format
+            self.transactions.append(max_fee_transaction)
+            self.mempool.remove(max_fee_transaction)
+
+    def add_node(self, address):
+        """Adds the node containing the address to the set of nodes
+
+        :param address: str
+            address of the node
         """
-        validity = self.is_chain_valid(self.chain)
-        if validity:
-            return {'message': 'The chain is valid!'}
+        parsed_url = urlparse(address)
+        self.nodes.add(parsed_url.netloc)
 
-        return {'message': 'The chain is NOT valid!'}
+    def replace_chain(self):
+        """Checks if the chain on any node is longer than the current chain.
+        if it is longer, then set the longest chain as the valid chain.
+
+        :return bool:
+            True if the Blockchain was replaced
+        """
+        longest_chain = None
+        max_length = len(self.chain)
+
+        for node in self.nodes:
+            response = requests.get('http://{}/get_chain'.format(node))
+            if response.status_code == 200:
+                length = response.json()['length']
+                chain = response.json()['chain']
+                if length > max_length and self.is_chain_valid(chain):
+                    max_length = length
+                    longest_chain = chain
+
+        if longest_chain:
+            self.chain = longest_chain
+            return True
 
 
-if __name__ == "__main__": 
-    import pprint as pp
-    bc = Blockchain()
-    print("="*84)
-    print("CREATING A BLOCKCHAIN!")
-    print("="*84)
-    print("\n")
-    print("the Initial Blockchain with the genesis block is:\n")
-    pp.pprint(bc.get_chain())
-    print("\n")
-    print("Mining one coin!")
-    print("The second coin is:\n")
-    block_2 = bc.mine_block()
-    block_3 = bc.mine_block()
-    pp.pprint(block_3)
-    print("\n")
-    print("Displaying the current Chain!\n")
-    pp.pprint(bc.get_chain())
-    print("\n")
-    print("Is the chain valid?\n")
-    pp.pprint(bc.is_valid())
-    print("\n")
-    print("Modifying the previous hash of the last block.")
-    print("pay attention to the previous hash value!")
-    print("The chain now is:")
-    print("\n")
-    bc.chain[2]["previous_hash"] = '0'
-    pp.pprint(bc.get_chain())
-    print("\n")
-    print("Is the chain valid?\n")
-    pp.pprint(bc.is_valid())
-    print("\n")
-    print("="*84)
-    print("END OF EXAMPLE!")
-    print("="*84)
+if __name__ == "__main__":
+    from webapp_DeBraineChain import *
+    port_number = 5000
+    main()

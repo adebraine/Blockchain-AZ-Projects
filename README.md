@@ -3,47 +3,48 @@
 ## Table of Contents
 
 1. [Summary](#Summary)
-2. [Version Summary](#Version-Summary)
-3. [Version 1.0 Creating the Basic Blockchain](#Version-1.0:-Creating-the-Basic-Blockchain)
-4. [Notes](#Notes)
+2. [Notes](#Notes)
     1. [The blockchain](#THE-BLOCKCHAIN)
     2. [The Cryptocurrency](#THE-CRYPTOCURRENCY)
     3. [The Smart Contract](#THE-SMART-CONTRACT)
-5. [Resources](Resources)
+3. [Resources](Resources)
 
 ## Summary
 
-## Version Summary
-**V1.0**:
+**Version 1.0: Creating the Basic Blockchain**
 - Blockchain class created (without stored data)
 - Able to rudimentarily: 
     - display the chain
     - mine a block
     - check the validity of the chain
 
-## Version 1.0: Creating the Basic Blockchain
-- Blockchain class created (without stored data)
-- Able to rudimentarily: 
-    - display the chain
-    - mine a block
-    - check the validity of the chain
+    **Instructions**
+    - run `python blockchain.py`
+    
+**Version 2.0: Creating the Basic Cryptocurrency**
+- Blockchain class modifed to allow for transactions
+- transactions include:
+    - miner rewards
+    - fees
+    - amount transfered
+- Added creation of nodes features to allow multiple individuals and/or miners
+- Added Consensus protocol
 
-### Instructions
+    **Instructions**
+    - run `python node_5001.py` and/or `python node_5002.py` etc...
+        - to create multiple nodes
+    - Following commands are available:
+        - GET:
+            - `http://127.0.0.1:5001/get_chain`
+            - `http://127.0.0.1:5001/mine_block`
+            - `http://127.0.0.1:5001/replace_chain`
+            - `http://127.0.0.1:5001/is_valid`
+        - POST:
+            - `http://127.0.0.1:5001/add_transaction`
+                - example JSON: `transactions.json`
+            - `http://127.0.0.1:5001/connect_node`
+                - example JSON: `nodes.json`
 
-**To run the code:**
-
-1. run `python blockchain.py`
-
-**or**
-
-1. Install Flask: `pip install Flask==0.12.2`
-2. Run `python webapp.py`
-3. Open browser and navigate to either of these web pages:
-    1. `http://127.0.0.1:5000/get_chain`: displays the blockchain.
-    2. `http://127.0.0.1:5000/mine_block`: mines a block
-    3. `http://127.0.0.1:5000/get_chain`: checks the validity of the blockchain
-
-![](Blockchain_V_1_0.gif)
 
 ## Notes
 

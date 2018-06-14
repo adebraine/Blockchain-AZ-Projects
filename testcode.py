@@ -1,14 +1,36 @@
-import json
+import pprint as pp
 
-block = {'index': 11,
-         'time_stamp': '11/11/11',
-         'proof': 11,
-         'previous_hash': '0000',
-         'hash_operation': '0000',
-         'data': {}}
+mempool = []
+transaction1 = {"sender": "sender",
+                "receiver": "receiver",
+                "amount": 11}
 
-strblock = json.dumps(block, sort_keys=True)
+transaction2 = {"sender": "sender",
+                "receiver": "receiver",
+                "amount": 12}
 
-print(strblock)
+transaction3 = {"sender": "sender",
+                "receiver": "receiver",
+                "amount": 13}
 
-print(type(strblock))
+transaction4 = {"sender": "sender",
+                "receiver": "receiver",
+                "amount": 14}
+
+mempool.append(transaction1)
+mempool.append(transaction2)
+mempool.append(transaction3)
+mempool.append(transaction4)
+transactions = []
+transactions.append(transaction1)
+transactions.append(transaction2)
+
+mempool = mempool + transactions
+
+pp.pprint(mempool)
+
+print(type(mempool))
+
+list(set(mempool) - set(transactions))
+
+pp.pprint(mempool)
