@@ -29,8 +29,6 @@ mempool = mempool + transactions
 
 pp.pprint(mempool)
 
-print(type(mempool))
 
-list(set(mempool) - set(transactions))
 
 pp.pprint(mempool)

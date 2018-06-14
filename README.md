@@ -1,5 +1,7 @@
 # Blockchain-AZ-Projects
 
+Based on the incredible course: [Blockchain A-Z on Udemy](https://www.udemy.com/build-your-blockchain-az/)
+
 ## Table of Contents
 
 1. [Summary](#Summary)
@@ -11,40 +13,68 @@
 
 ## Summary
 
-**Version 1.0: Creating the Basic Blockchain**
-- Blockchain class created (without stored data)
-- Able to rudimentarily: 
-    - display the chain
-    - mine a block
-    - check the validity of the chain
-
-    **Instructions**
-    - run `python blockchain.py`
+### THE BLOCKCHAIN
+- **Version 1.0: Creating the Basic Blockchain**
+    - **Codes involved:**
+        - `blockchain.py`
+        - `webapp_blockchain.py`
+    - **Progress**
+        - Blockchain class created (without stored data)
+        - Able to rudimentarily: 
+            - display the chain
+            - mine a block
+            - check the validity of the chain
+    - **Instructions**
+        - run `python blockchain.py`
     
-**Version 2.0: Creating the Basic Cryptocurrency**
-- Blockchain class modifed to allow for transactions
-- transactions include:
-    - miner rewards
-    - fees
-    - amount transfered
-- Added creation of nodes features to allow multiple individuals and/or miners
-- Added Consensus protocol
+- **Version 2.0: Creating the Basic Cryptocurrency**
+    - **codes involved:**
+        - `DeBraineChain.py`
+        - `webapp_DeBraineChain.py`
+            - Other Copies:
+                - `node_5001.py`
+                - `node_5002.py`
+                - `node_5003.py`
+        - `nodes.json`
+        - `transaction.json`
+    - **Progress**
+        - Built upon V1.0, added:
+            - transactions
+                - transactions include:
+                    - miner rewards
+                    - fees
+                    - amount transfered
+            - UTOX
+            - Mempool
+            - Creation of nodes features to allow multiple individuals and/or miners
+            - Consensus protocol
+            - Mining a block validates transactions
+    - **Instructions**
+        - run `python node_5001.py` and/or `python node_5002.py` etc...
+            - to create multiple nodes
+        - Following commands are available:
+            - GET:
+                - `http://127.0.0.1:5001/get_chain`
+                - `http://127.0.0.1:5001/mine_block`
+                - `http://127.0.0.1:5001/replace_chain`
+                - `http://127.0.0.1:5001/is_valid`
+            - POST:
+                - `http://127.0.0.1:5001/add_transaction`
+                    - example JSON: `transactions.json`
+                - `http://127.0.0.1:5001/connect_node`
+                    - example JSON: `nodes.json`
 
-    **Instructions**
-    - run `python node_5001.py` and/or `python node_5002.py` etc...
-        - to create multiple nodes
-    - Following commands are available:
-        - GET:
-            - `http://127.0.0.1:5001/get_chain`
-            - `http://127.0.0.1:5001/mine_block`
-            - `http://127.0.0.1:5001/replace_chain`
-            - `http://127.0.0.1:5001/is_valid`
-        - POST:
-            - `http://127.0.0.1:5001/add_transaction`
-                - example JSON: `transactions.json`
-            - `http://127.0.0.1:5001/connect_node`
-                - example JSON: `nodes.json`
-
+### THE SMART CONTRACT
+- **Version 1.0: Created a basic Smart Contract in `Solidity`**
+    - **codes involved:**
+        - `ICO.sol`
+    - **Progress**
+        - Created a basic Smart Contract in solidity:
+            - Able to:
+                - Invest USD
+                - Buy Token with USD
+                - Sell Token back to USD
+                - Check Balances
 
 ## Notes
 
@@ -88,12 +118,14 @@
         - protocol/coin: 
             - A set of rules that guides how participants in the networks to communicate with each other
             - Contains a coin
+            - can be mined, typically the basis of the mining rewards.
             - examples of protocols:
                 - Bitcoin, Ethereum, etc...
         - token: ICOs offer tokens and not coins
             - rely on smart contract that rely on protocols
             - represents the "idea" behind what they are building
             - Bitcoin, and Ripple have no tokens
+            - there is no mining involved with tokens
     - Invented by Satoshi Nakamoto
     - Bitcoin Ecosystem:
         - Nodes: People
@@ -308,6 +340,91 @@
 
 ### THE SMART CONTRACT
 
+- **What is Ethereum?**
+    - Created by Vitalik Buterin (at 19 years old)
+    - It is a protocol but designed not as a coin but as a platform for other projects to build on
+    - Holds not only transactions but also smart contracts (programs)
+    - imagine running Facebook not on a server but on a blockchain (i.e. on everyone's computer)
+    - The idea: build a super computer on everyone's computer through a blockchain
+- **What is a Smart Contract?**
+    - It is a program (code) stored on the blockchain
+    - The framework (script) that allows code to be stored on Ethereum is called "solidify"
+    - Solidify is **turing-complete**
+        - meaning you can code any logic on that language
+        - Can avoid problems from infinite loops or heavy loops that might significantly slow down the blockchain (since programs run off the whole chain).
+    - Each node has:
+        - History of all smart contracts
+        - history of all transactions
+        - current state of all smart contracts
+- **Decentralized Applications (Dapps)**
+    - Interface for people to interact with something on the blockchain
+        - the API for smart contracts
+    - Dapp: Front end
+    - Smart contract: back end
+- **Ethereum Virtual Machine & Gas**
+    - Security threats of smart contracts:
+        - what if infinite loops or heavy computation programs are stored on the blockchain?
+        - what if a virus is stored as a smart contract and could potentially infect all participants?
+        - what if a smart contract is designed to access personal information of everyone on the blockchain?
+    - viruses and access to private information:
+        - Ethereum virtual Machine (EVM)
+            - A virtual machine running on a computer meaning the smart contract only runs on that virtual environement and not on the actual computer
+            - meaning if anything is wrong, only the secluded virtual environement is affected
+            - Not able to leave the confinment of the virtual environement
+    - Heavy calculations and infinite loop
+        - GAS:
+            - For any computation that is run on the blockchain, the developer (or smart contractor) need to pay (hence the concept of GAS).
+            - Any operation costs a certain units of GAS (Refer to [https://ethgasstation.info](https://ethgasstation.info))
+            - Forces people to write efficient code to minimize GAS cost
+    - The idea behind Ethereum:
+        - Use Ether to pay to run a code on the blockchain Ethereum: a Platform
+- **Decentralized Autonomous Organizations (DAOs)**
+    - An organization structure where "people/employees" are replaced by smart contracts
+    - An organization that runs itself on a blockchain
+- **The DAO Attack**
+    - The DAO: 
+        - one of the first decentralized autonomous organization created by vitalik himself
+        - Investor-directed venture capital fund on Ethereum
+        - was stateless (not run by any country)
+        - May 2016: most successful crowdfunded project in history: $150,000,000
+    - The error in the code:
+        - An error in the code allowed for a hack of $50,000,000
+        - The perpetrators didn't actually do anything illegal, they just find a flaw in the code that allowed them to siphon money out of the DAO account to theirs.
+        - No one could stop it because the DAO was autonomous and the flaw was there.
+        - The contracts by definition are immutable so couldn't be stopped.
+    - The failsafe:
+        - Funds cannot be taken out entirely from the DAO but first have to wait 30 days in a child company of the DAO.
+    - The dilemna:
+        - The code is LAW?
+        - Should it be stopped or not?
+        - A hard fork was proposed to change the code (change the smart contract).
+        - The hard fork was done.
+    - Ethereum was split into ETH and ETC
+        - ETH: the money taken was redirected to their respective owners
+        - ETC: the money stayed with the hacker
+            - The hacker walked away with $67,000,000 worth of ETC
+    - The problem was in the DAO code and not Ethereum
+- **Soft and Hard Forks**
+    - A fork refers to making a copy of the software in order to make a change (refers to the software not the blockchain per say)
+    - A fork can lead to a split of the blockchain, meaning the creation of a new blockchain containing the history of the older blockchain but with the software change included and the old blockchain continuing on without the software change.
+    - Soft Fork:
+        - A rule of thumb: Tightens up the rules
+        - meaning that the changes don't need the blockchain to split (but can if people wish to continue with the old rules) as the new blocks that follow new rules validate both the new and old rules and so does not need a split. The new rules validate the old rules too. This only happens if prior agreement happen and the people that follow the new rule have the majority of the hashing power and their chain will always be the longest one.
+        - Bitcoin Example: 
+            - The introduction of SegWit (july 2017) on block 476768
+            - SegWit stores the signature of each transaction in another parallel system to free space from each block
+    - Hard Fork:
+        - Changes significant enough that new blocks that follow the old rules don't validate the new rules or that a new block created by the new block doesn't follow the old rules forcing a split.
+        - A rule of thumb: Loosens up the rules
+        - Bitcoin Example 1:
+            - The split occured (july 20 2017) and created Bitcoin Cash
+            - The increase from 2Mb to 8Mb of memory for transactions in each block
+            - Bitcoin remained at 2Mb, Bitcoin Cash had 8Mb
+        - Bitcoin Example 2:
+            - Changed the software to be ASIC resistant (october 24 2017)
+            - Split between Bitcoin Gold and Bitcoin
+- **Initial Coin Offerings (ICOs)**
+    - Equivalent of IPOs for blockchains except you receive tokens instead of shares.
 
 ## Resources
 
