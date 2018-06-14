@@ -9,7 +9,8 @@ Based on the incredible course: [Blockchain A-Z on Udemy](https://www.udemy.com/
     1. [The blockchain](#THE-BLOCKCHAIN)
     2. [The Cryptocurrency](#THE-CRYPTOCURRENCY)
     3. [The Smart Contract](#THE-SMART-CONTRACT)
-3. [Resources](Resources)
+3. [Output Examples](#Output-Examples)
+4. [Resources](Resources)
 
 ## Summary
 
@@ -425,6 +426,203 @@ Based on the incredible course: [Blockchain A-Z on Udemy](https://www.udemy.com/
             - Split between Bitcoin Gold and Bitcoin
 - **Initial Coin Offerings (ICOs)**
     - Equivalent of IPOs for blockchains except you receive tokens instead of shares.
+
+## Output Examples
+
+### BlockChain With Transactions
+
+```json
+    {
+        "chain": [
+            {
+                "hash_operation": "0",
+                "index": 1,
+                "previous_hash": "0",
+                "proof": 1,
+                "time_stamp": "2018-06-14 10:04:04.239609",
+                "transactions": []
+            },
+            {
+                "hash_operation": "0000c00870f23a23ae80377298491b091db400d575be0efbde5b310f2f763ed1",
+                "index": 2,
+                "previous_hash": "f5b429ea032d12820f01912e515c52597466b343f5d94dd0234392cc12ebefc6",
+                "proof": 533,
+                "time_stamp": "2018-06-14 10:04:12.364284",
+                "transactions": []
+            },
+            {
+                "hash_operation": "0000b8318b7ca4e2bc9be063d7dfcb0d0e70f1b27133001f714f11c058c31e99",
+                "index": 3,
+                "previous_hash": "9668b6707a5115b0548e3b23a89a457f15a3370276b76dbeb5c64f2b2ca06504",
+                "proof": 45293,
+                "time_stamp": "2018-06-14 10:04:12.735498",
+                "transactions": []
+            },
+            {
+                "hash_operation": "000012c643d9610a15e350cb92ec6386b2b15e9d4170a0f06a4fd8525e440207",
+                "index": 4,
+                "previous_hash": "7162d29b67aa71d78a492cb5fa58023f97f45dbba1f0f79e088124590efca7a0",
+                "proof": 21391,
+                "time_stamp": "2018-06-14 10:04:13.192597",
+                "transactions": []
+            },
+            {
+                "hash_operation": "00004bd97b406d4c157b1f3293466d414711218bf9b44502fc96208a9ad4b3fb",
+                "index": 5,
+                "previous_hash": "d59e8664e525ce2f90278cbb3ad61350c758482460d10c944304fb2e0fc8bcca",
+                "proof": 8018,
+                "time_stamp": "2018-06-14 10:04:13.598482",
+                "transactions": []
+            },
+            {
+                "hash_operation": "00000f1a0dbcb6f6e74d8b2e15153e0320119ed7cb7519683bc116851d6d4fc3",
+                "index": 6,
+                "previous_hash": "278bd6d64a5c643ba55efd910d23e1f822a54b7d208d0c213de5022fa26c8731",
+                "proof": 48191,
+                "time_stamp": "2018-06-14 10:05:01.929271",
+                "transactions": [
+                    {
+                        "amount": 83.75,
+                        "fee": 0.5,
+                        "receiver": "Miner_5002",
+                        "sender": "Miner_5001"
+                    },
+                    {
+                        "amount": 83.75,
+                        "fee": 0.5,
+                        "receiver": "Miner_5002",
+                        "sender": "Miner_5001"
+                    },
+                    {
+                        "amount": 83.75,
+                        "fee": 0.5,
+                        "receiver": "Miner_5002",
+                        "sender": "Miner_5001"
+                    },
+                    {
+                        "amount": 83.75,
+                        "fee": 0.5,
+                        "receiver": "Miner_5002",
+                        "sender": "Miner_5001"
+                    }
+                ]
+            },
+            {
+                "hash_operation": "0000da4012ef88a954b83b6d188fca1d354973ded35762e3fabb875024aa2768",
+                "index": 7,
+                "previous_hash": "808566074db718a57649fcfb617dbb708128799953f4e4e610eefdeb5025e951",
+                "proof": 19865,
+                "time_stamp": "2018-06-14 10:05:38.318547",
+                "transactions": []
+            }
+        ],
+        "length": 7
+    }
+```
+
+### Transaction from UTOX to the Mempool
+
+**Transaction Example**
+```json
+    {
+        "sender": "Miner_5001",
+        "receiver": "Miner_5002",
+        "amount": 83.75,
+        "fee": 0.5
+    }
+```
+**Transaction from UTOX to Mempool Example**
+```json
+    {
+        "balance": 47.25,
+        "message": "This transaction will be added to the Mempool",
+        "wallet": [
+            {
+                "amount": 15.75,
+                "fee": 0.5,
+                "receiver": "Miner_5002",
+                "sender": "Miner_5001"
+            },
+            {
+                "amount": 15.75,
+                "fee": 0.5,
+                "receiver": "Miner_5002",
+                "sender": "Miner_5001"
+            },
+            {
+                "amount": 15.75,
+                "fee": 0.5,
+                "receiver": "Miner_5002",
+                "sender": "Miner_5001"
+            }
+        ]
+    }
+```
+
+### Mining a Block after a Transaction
+
+```json
+    {
+        "Miner_UTOX": [
+            {
+                "amount": 15.75,
+                "fee": 0.5,
+                "receiver": "Miner_5002",
+                "sender": "Miner_5001"
+            },
+            {
+                "amount": 15.75,
+                "fee": 0.5,
+                "receiver": "Miner_5002",
+                "sender": "Miner_5001"
+            },
+            {
+                "amount": 15.75,
+                "fee": 0.5,
+                "receiver": "Miner_5002",
+                "sender": "Miner_5001"
+            },
+            {
+                "amount": 102,
+                "fee": 0,
+                "receiver": "Miner_5001",
+                "sender": "79b8ff71911a43c5932baaaf472c90a3"
+            }
+        ],
+        "hash_operation": "00004bd97b406d4c157b1f3293466d414711218bf9b44502fc96208a9ad4b3fb",
+        "index": 5,
+        "message": "Block Mined!",
+        "previous_hash": "9ad41f80734c7f24016b71ea28ba9dd5291b01381a2d7a45968339db035264ab",
+        "proof": 8018,
+        "time_stamp": "2018-06-14 17:04:09.756132",
+        "transactions": [
+            {
+                "amount": 83.75,
+                "fee": 0.5,
+                "receiver": "Miner_5002",
+                "sender": "Miner_5001"
+            },
+            {
+                "amount": 83.75,
+                "fee": 0.5,
+                "receiver": "Miner_5002",
+                "sender": "Miner_5001"
+            },
+            {
+                "amount": 83.75,
+                "fee": 0.5,
+                "receiver": "Miner_5002",
+                "sender": "Miner_5001"
+            },
+            {
+                "amount": 83.75,
+                "fee": 0.5,
+                "receiver": "Miner_5002",
+                "sender": "Miner_5001"
+            }
+        ]
+    }
+```
 
 ## Resources
 

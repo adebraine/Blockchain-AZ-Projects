@@ -233,17 +233,20 @@ class Blockchain:
         if not self.mempool:
             return
         for n in range(self.transactions_per_block):
-            max_fee = 0
-            for index, transaction in enumerate(self.mempool):
-                if transaction['fee'] > max_fee:
-                    max_fee = transaction['fee']
-                    max_fee_transaction = transaction
+            try:
+                max_fee = 0
+                for index, transaction in enumerate(self.mempool):
+                    if transaction['fee'] > max_fee:
+                        max_fee = transaction['fee']
+                        max_fee_transaction = transaction
 
-            print(max_fee_transaction)
-            print(self.mempool)
+                print(max_fee_transaction)
+                print(self.mempool)
 
-            self.transactions.append(max_fee_transaction)
-            self.mempool.remove(max_fee_transaction)
+                self.transactions.append(max_fee_transaction)
+                self.mempool.remove(max_fee_transaction)
+            except:
+                break
 
     def add_node(self, address):
         """Adds the node containing the address to the set of nodes
