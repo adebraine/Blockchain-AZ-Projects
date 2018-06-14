@@ -10,6 +10,9 @@ Based on the incredible course: [Blockchain A-Z on Udemy](https://www.udemy.com/
     2. [The Cryptocurrency](#THE-CRYPTOCURRENCY)
     3. [The Smart Contract](#THE-SMART-CONTRACT)
 3. [Output Examples](#Output-Examples)
+    1. [BlockChain With Transactions](#BlockChain-With-Transactions)
+    2. [Transaction from UTOX to the Mempool](#Transaction-from-UTOX-to-the-Mempool)
+    3. [Mining a Block after a Transaction](#Mining-a-Block-after-a-Transaction)
 4. [Resources](Resources)
 
 ## Summary
