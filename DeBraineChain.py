@@ -67,8 +67,8 @@ class Blockchain:
                  'previous_hash': previous_hash,
                  'hash_operation': self.hash_operation,
                  'transactions': self.transactions}
-        self.transactions = []
         self.chain.append(block)
+        self.transactions = []
 
         return block
 
@@ -191,14 +191,15 @@ class Blockchain:
                 cost += transaction['amount']
                 self.UTOX.remove(transaction)
 
-            if cost - amount - fee > 0:
-                return_transaction = self.create_transaction(
-                    sender, receiver, cost - amount - fee, fee)
-                self.UTOX.append(return_transaction)
-            elif cost - amount - fee >= 0:
+            if cost - amount - fee >= 0:
                 output_transaction = self.create_transaction(
                     sender, receiver, amount, fee)
                 self.mempool.append(output_transaction)
+                if cost - amount - fee > 0:
+                    return_transaction = self.create_transaction(
+                        sender, receiver, cost - amount - fee, fee)
+                    self.UTOX.append(return_transaction)
+            
 
             return True
         return False
@@ -228,6 +229,7 @@ class Blockchain:
         :return: int
             index of the block that contains the transactions
         """
+        print(self.mempool)
         if not self.mempool:
             return
         for n in range(self.transactions_per_block):
